@@ -20,6 +20,7 @@ import {
   Globe,
   Bell,
   Lightbulb,
+  Smartphone,
 } from "lucide-react"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
@@ -225,6 +226,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "All Reviews",
             url: "/admin/reviews",
             icon: Star,
+          },
+          {
+            title: "SMS Settings",
+            url: "/admin/sms",
+            icon: Smartphone,
           },
         ],
       },

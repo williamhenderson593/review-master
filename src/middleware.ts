@@ -26,6 +26,7 @@ const protectedPaths = [
   '/analytics',
   '/insights',
   '/admin/reviews',
+  '/admin/sms',
   '/automations',
   '/campaigns',
   '/contacts',
