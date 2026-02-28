@@ -60,7 +60,7 @@ export function LandingNavbar() {
           <Link href="/" className="flex items-center space-x-2 cursor-pointer">
             <Logo size={32} />
             <span className="font-bold">
-              Annalytick
+              ReviewFlow
             </span>
           </Link>
         </div>

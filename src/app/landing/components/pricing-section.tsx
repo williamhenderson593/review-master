@@ -5,38 +5,44 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { useState } from 'react'
+import Link from 'next/link'
 
 const plans = [
   {
     name: 'Starter',
-    description: 'For individuals and small teams getting started with web scraping',
+    description: 'For small businesses getting started with review management',
     monthlyPrice: 0,
     yearlyPrice: 0,
     features: [
-      'Up to 3 projects',
-      '5 Apify actors',
-      'Basic run monitoring',
-      'Data export (CSV)',
+      '3 review profiles',
+      '2 platforms connected',
+      'Unified review inbox',
+      'Basic analytics',
+      '1 team member',
+      '1 campaign',
+      'Email notifications',
       'Community support'
     ],
     cta: 'Get Started Free',
     popular: false
   },
   {
-    name: 'Pro',
-    description: 'For growing teams that need full visibility and control',
-    monthlyPrice: 29,
-    yearlyPrice: 23,
+    name: 'Growth',
+    description: 'For growing SaaS and B2B teams that need full review management',
+    monthlyPrice: 49,
+    yearlyPrice: 39,
     features: [
-      'Unlimited projects',
-      'Unlimited actors',
-      'Real-time run analytics',
-      'Unified datastore with search',
-      'Team collaboration (up to 10)',
-      'Cost tracking & reports',
-      'Priority email support',
-      'CSV & JSON export',
-      'Custom dashboards'
+      '15 review profiles',
+      'All 15+ platforms',
+      'AI reply suggestions',
+      'Sentiment analytics',
+      'Up to 5 team members',
+      'Unlimited campaigns',
+      'Review widgets (3)',
+      'Slack & email integrations',
+      'Competitor tracking (3)',
+      'Weekly digest emails',
+      'Priority support'
     ],
     cta: 'Start Free Trial',
     popular: true,
@@ -44,20 +50,25 @@ const plans = [
   },
   {
     name: 'Enterprise',
-    description: 'For organizations with advanced security and scale needs',
-    monthlyPrice: 99,
-    yearlyPrice: 79,
+    description: 'For agencies and large organizations managing multiple brands',
+    monthlyPrice: 149,
+    yearlyPrice: 119,
     features: [
+      'Unlimited review profiles',
       'Unlimited team members',
-      'Role-based access control',
+      'Multiple brand workspaces',
       'SSO / SAML authentication',
+      'Custom AI agent profiles',
+      'Advanced automations',
+      'Unlimited widgets',
+      'HubSpot & Salesforce sync',
       'Dedicated account manager',
-      'Custom integrations & API',
-      'SLA & uptime guarantee'
+      'SLA & uptime guarantee',
+      'Custom API access'
     ],
     cta: 'Contact Sales',
     popular: false,
-    includesPrevious: 'Everything in Pro, plus'
+    includesPrevious: 'Everything in Growth, plus'
   }
 ]
 
@@ -74,7 +85,7 @@ export function PricingSection() {
             Simple, transparent pricing
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Start free and scale as your team grows. No hidden fees, no surprises — just the tools you need to manage web scraping at scale.
+            Start free and scale as your review management needs grow. No hidden fees — just the tools you need to win more reviews and protect your reputation.
           </p>
 
           {/* Billing Toggle */}
@@ -101,7 +112,7 @@ export function PricingSection() {
           </div>
 
           <p className="text-sm text-muted-foreground">
-            <span className="text-primary font-semibold">Save 20%</span> On Annual Billing
+            <span className="text-primary font-semibold">Save 20%</span> on annual billing
           </p>
         </div>
 
@@ -120,7 +131,10 @@ export function PricingSection() {
                 >
                   {/* Plan Header */}
                   <div>
-                    <div className="text-lg font-medium tracking-tight mb-2">{plan.name}</div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="text-lg font-medium tracking-tight">{plan.name}</div>
+                      {plan.popular && <Badge className="text-xs">Most Popular</Badge>}
+                    </div>
                     <div className="text-muted-foreground text-balance text-sm">{plan.description}</div>
                   </div>
 
@@ -134,7 +148,7 @@ export function PricingSection() {
                       )}
                     </div>
                     <div className="text-muted-foreground text-sm">
-                      {plan.name === 'Starter' ? 'Free forever' : 'Per month'}
+                      {plan.name === 'Starter' ? 'Free forever' : plan.name === 'Enterprise' ? 'Per month, billed annually' : 'Per month'}
                     </div>
                   </div>
 
@@ -147,8 +161,11 @@ export function PricingSection() {
                           : 'shadow-sm shadow-black/15 border border-transparent bg-background ring-1 ring-foreground/10 hover:bg-muted/50'
                       }`}
                       variant={plan.popular ? 'default' : 'secondary'}
+                      asChild
                     >
-                      {plan.cta}
+                      <Link href={plan.name === 'Enterprise' ? '#contact' : '/sign-up'}>
+                        {plan.cta}
+                      </Link>
                     </Button>
                   </div>
 
@@ -174,14 +191,13 @@ export function PricingSection() {
           </div>
         </div>
 
-        {/* Enterprise Note */}
-        <div className="mt-16 text-center">
-          <p className="text-muted-foreground">
-            Need a custom plan or have questions about enterprise features? {' '}
-            <Button variant="link" className="p-0 h-auto cursor-pointer" asChild>
-              <a href="#contact">
-                Contact our team
-              </a>
+        {/* Trial Note */}
+        <div className="mt-12 text-center">
+          <p className="text-muted-foreground text-sm">
+            All paid plans include a <strong>14-day free trial</strong>. No credit card required.
+            {' '}
+            <Button variant="link" className="p-0 h-auto cursor-pointer text-sm" asChild>
+              <a href="#contact">Questions? Talk to us →</a>
             </Button>
           </p>
         </div>

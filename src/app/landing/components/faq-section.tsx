@@ -14,39 +14,51 @@ type FaqItem = {
 const faqItems: FaqItem[] = [
   {
     value: 'item-1',
-    question: 'How does Annalytick connect to my Apify account?',
+    question: 'Which review platforms does ReviewFlow support?',
     answer:
-      'Simply add your Apify API token in the settings page. Annalytick uses the token to sync your actors, fetch run data, and pull output datasets. Your token is encrypted at rest and never shared with third parties.',
+      'ReviewFlow supports 15+ platforms including Google Business, TripAdvisor, G2, Capterra, Trustpilot, App Store, Play Store, Software Advice, Gartner Peer Insights, TrustRadius, Shopify App Store, WordPress Plugin Directory, Salesforce AppExchange, HubSpot Marketplace, and Pipedrive Marketplace. We are constantly adding more.',
   },
   {
     value: 'item-2',
-    question: 'What is the difference between the Starter and Pro plans?',
+    question: 'How does review collection work?',
     answer:
-      'The Starter plan is free forever and includes up to 3 projects and 5 actors with basic run monitoring. The Pro plan unlocks unlimited projects and actors, real-time analytics, the unified datastore, team collaboration, cost tracking, and priority support.',
+      'ReviewFlow connects to each platform via their official APIs or web monitoring. New reviews are automatically pulled into your unified inbox in real time. You can also set up webhooks for instant notifications. No manual checking required.',
   },
   {
     value: 'item-3',
-    question: 'Can I use Annalytick with public Apify actors from the store?',
+    question: 'What is a Magic Link and how does review generation work?',
     answer:
-      'Yes! You can sync both your own actors and any public actor from the Apify Store. Just enter the actor ID and Annalytick will import it into your workspace so you can track runs and data alongside your own actors.',
+      'A Magic Link is a smart URL that routes customers to the best review platform based on your goals — for example, balancing reviews across platforms or targeting the platform where your rating is lowest. You can share magic links via email, SMS, QR code, or embed them in your product. The reputation protection feature routes unhappy customers to private feedback before they post publicly.',
   },
   {
     value: 'item-4',
-    question: 'How does the unified datastore work?',
+    question: 'Can I respond to reviews directly from ReviewFlow?',
     answer:
-      'The datastore combines output data from all successful runs for a given actor into a single, searchable table. You can filter, toggle columns, paginate through results, and export to CSV or JSON — all without writing any code.',
+      'Yes! For supported platforms (Google, Trustpilot, and others), you can write and publish replies directly from the ReviewFlow dashboard. For other platforms, we provide a reply composer with AI suggestions that you can copy and paste. AI reply suggestions are based on the review content, rating, sentiment, and platform.',
   },
   {
     value: 'item-5',
-    question: 'Can I invite my team members?',
+    question: 'How does the Slack integration work?',
     answer:
-      'Absolutely. On the Pro and Enterprise plans, you can invite team members by email. They will receive an invitation link, and once they sign up, they are automatically added to your organization with the appropriate role and permissions.',
+      'Connect your Slack workspace and choose which channels to post reviews to. You can configure filters — for example, only post 1-3 star reviews to your support channel, and all reviews to a general #reviews channel. Your team gets real-time visibility into customer feedback without leaving Slack.',
   },
   {
     value: 'item-6',
+    question: 'Is there a free trial? Do I need a credit card?',
+    answer:
+      'Yes — all paid plans include a 14-day free trial with no credit card required. The Starter plan is free forever with limited features. You can upgrade, downgrade, or cancel at any time.',
+  },
+  {
+    value: 'item-7',
+    question: 'Can I manage multiple brands or clients?',
+    answer:
+      'Yes. The Enterprise plan supports multiple brand workspaces within one organization — perfect for agencies managing multiple clients or companies with multiple product lines. Each workspace has its own review profiles, campaigns, and settings.',
+  },
+  {
+    value: 'item-8',
     question: 'Is my data secure?',
     answer:
-      'Security is a top priority. All API keys are encrypted at rest, connections use HTTPS, and we support role-based access control. Enterprise customers also get SSO/SAML support and dedicated infrastructure options.',
+      'Security is a top priority. All OAuth tokens and credentials are encrypted at rest. Connections use HTTPS. We support role-based access control (Admin, Editor, Viewer) and maintain an audit log of all actions. Enterprise customers get SSO/SAML support.',
   },
 ]
 
@@ -61,7 +73,7 @@ const FaqSection = () => {
             Frequently Asked Questions
           </h2>
           <p className="text-lg text-muted-foreground">
-            Everything you need to know about Annalytick, Apify integration, pricing, and data security. Still have questions? We&apos;re here to help!
+            Everything you need to know about ReviewFlow, supported platforms, pricing, and integrations. Still have questions? We&apos;re here to help!
           </p>
         </div>
 

@@ -10,23 +10,23 @@ import { ArrowRight, Shield, Zap, BarChart3, Users } from 'lucide-react'
 const values = [
   {
     icon: Zap,
-    title: 'Unified Run Data',
-    description: 'Data from multiple runs of the same actor is combined into one dataset — no manual merging, no scattered files. A feature most platforms don\'t offer.'
+    title: 'Unified Inbox',
+    description: 'All reviews from all platforms in one place. No more checking 15 tabs every morning. Filter, search, and respond from a single dashboard.'
   },
   {
     icon: BarChart3,
-    title: 'Project Lifecycle',
-    description: 'Connect actors to projects with defined timelines. Run them on schedule or manually, and close projects when the work is done.'
+    title: 'AI-Powered Insights',
+    description: 'Sentiment analysis, topic extraction, and trend charts powered by AI. Know exactly what customers love and what needs fixing — across every platform.'
   },
   {
     icon: Shield,
-    title: 'Flexible Data Access',
-    description: 'Access your data anywhere via REST API, or export to Excel, CSV, and JSON. Your data is always portable and ready for analysis.'
+    title: 'Reputation Protection',
+    description: 'Smart campaigns route unhappy customers to private feedback before they post publicly. Protect your rating while still hearing honest feedback.'
   },
   {
     icon: Users,
-    title: 'Public & Private Actors',
-    description: 'Sync and run public Apify actors from the store alongside your own private actors — all managed from one platform.'
+    title: 'Team Collaboration',
+    description: 'Assign reviews, share testimonials with sales, and celebrate 5-star reviews in Slack. Reviews become a team sport, not a solo chore.'
   }
 ]
 
@@ -37,14 +37,14 @@ export function AboutSection() {
         {/* Section Header */}
         <div className="mx-auto max-w-4xl text-center mb-16">
           <Badge variant="outline" className="mb-4">
-            About Annalytick
+            About ReviewFlow
           </Badge>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-6">
-            Built for data teams who move fast
+            Built for SaaS and B2B teams who care about reputation
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Annalytick was created to solve the chaos of managing web scraping at scale.
-            We give your team a single source of truth for every actor, run, and data point — so you can focus on insights, not infrastructure.
+            ReviewFlow was created to solve the chaos of managing reviews across dozens of platforms.
+            We give your team a single source of truth for every review, every platform, and every customer — so you can focus on growing your business, not chasing reviews.
           </p>
         </div>
 

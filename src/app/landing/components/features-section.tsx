@@ -1,67 +1,85 @@
 "use client"
 
 import {
+  Star,
   BarChart3,
   Zap,
-  Users,
-  ArrowRight,
-  Database,
-  FolderKanban,
-  DollarSign,
-  Calendar,
-  Shield,
+  Send,
+  Code2,
+  Plug,
+  MessageSquare,
   Globe,
-  FileDown,
-  Layers
+  Shield,
+  Users,
+  Bell,
+  TrendingUp,
 } from 'lucide-react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Image3D } from '@/components/image-3d'
+import { Card, CardContent } from '@/components/ui/card'
 
 const mainFeatures = [
   {
-    icon: FolderKanban,
-    title: 'Project-Based Management',
-    description: 'Connect actors to projects that run for a defined period. Manage timelines, track progress, and close projects when complete.'
-  },
-  {
-    icon: Calendar,
-    title: 'Scheduling & Manual Runs',
-    description: 'Schedule actors to run automatically on a cadence, or trigger them manually from the platform — no Apify console needed.'
-  },
-  {
-    icon: DollarSign,
-    title: 'Cost Tracking',
-    description: 'Monitor Apify usage costs per actor, per project, and across your entire organization in real time.'
-  },
-  {
     icon: Globe,
-    title: 'Public Actor Support',
-    description: 'Sync and run any public Apify actor from the store alongside your own private actors — all from one dashboard.'
+    title: 'Review Aggregation',
+    description: 'Connect Google, TripAdvisor, G2, Capterra, Trustpilot, App Store, Play Store, and 8 more platforms. All reviews in one unified inbox.'
+  },
+  {
+    icon: MessageSquare,
+    title: 'Respond & Manage',
+    description: 'Reply to reviews directly from the dashboard. AI-powered reply suggestions based on rating, sentiment, and platform. Flag, tag, and track action items.'
+  },
+  {
+    icon: BarChart3,
+    title: 'Sentiment Analytics',
+    description: 'AI-powered sentiment analysis, topic extraction, and trend charts. See what customers love and what needs improvement — across every platform.'
+  },
+  {
+    icon: Send,
+    title: 'Review Generation',
+    description: 'Send review requests via email, SMS, or magic links. Reputation protection routes unhappy customers to private feedback before they post publicly.'
   }
 ]
 
 const secondaryFeatures = [
   {
-    icon: Layers,
-    title: 'Combined Run Data',
-    description: 'Data from multiple runs of the same actor is automatically merged into one unified dataset — a feature most platforms simply don\'t offer.'
+    icon: Zap,
+    title: 'Smart Automations',
+    description: 'Auto-alert your team on low ratings, tag negative reviews, post to Slack — all triggered automatically when new reviews arrive.'
   },
   {
-    icon: FileDown,
-    title: 'API & Export Access',
-    description: 'Access your data anywhere via REST API, or export to Excel, CSV, and JSON with a single click.'
+    icon: Code2,
+    title: 'Embeddable Widgets',
+    description: 'Add a carousel, wall of love, or rating badge to your website. Auto-updates as new reviews come in. Zero performance impact.'
   },
   {
-    icon: Users,
-    title: 'Team Workspaces',
-    description: 'Invite members, manage roles, and collaborate on scraping projects together across your organization.'
+    icon: Plug,
+    title: 'Integrations',
+    description: 'Connect Slack, Gmail, Outlook, Microsoft Teams, HubSpot, Salesforce, Zapier, and more. Reviews flow into your existing workflow.'
   },
   {
     icon: Shield,
-    title: 'Secure by Default',
-    description: 'API keys encrypted, role-based access, and audit logs for every action.'
+    title: 'Competitor Tracking',
+    description: 'Monitor your competitors\' reviews across platforms. Benchmark your ratings and review volume against the competition.'
+  },
+  {
+    icon: Bell,
+    title: 'Real-time Alerts',
+    description: 'Instant email alerts for new reviews, low ratings, and negative sentiment. Weekly digest with your review performance summary.'
+  },
+  {
+    icon: Users,
+    title: 'Team Collaboration',
+    description: 'Role-based access for Admin, Editor, and Viewer. Assign reviews to team members. Audit log of all actions.'
+  },
+  {
+    icon: TrendingUp,
+    title: 'Review Campaigns',
+    description: 'Create targeted campaigns to collect reviews from your customers. Track impressions, clicks, and conversions in a review funnel.'
+  },
+  {
+    icon: Star,
+    title: 'Testimonial Library',
+    description: 'Searchable internal library of all reviews and quotes. Share with your sales and marketing team for proposals and decks.'
   }
 ]
 
@@ -73,113 +91,43 @@ export function FeaturesSection() {
         <div className="mx-auto max-w-2xl text-center mb-16">
           <Badge variant="outline" className="mb-4">Platform Features</Badge>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            Everything you need to manage web scraping at scale
+            Everything you need to win with reviews
           </h2>
           <p className="text-lg text-muted-foreground">
-            From actor orchestration to data collection and cost analytics — Annalytick gives your team complete visibility and control over every scraping workflow.
+            From aggregation to generation, analytics to automation — ReviewFlow gives your team complete control over your online reputation.
           </p>
         </div>
 
-        {/* First Feature Section */}
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-8 xl:gap-16 mb-24">
-          {/* Left Image */}
-          <Image3D
-            lightSrc="/feature-1-light.png"
-            darkSrc="/feature-1-dark.png"
-            alt="Project management dashboard"
-            direction="left"
-          />
-          {/* Right Content */}
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
-                Manage scraping as projects, not loose actors
-              </h3>
-              <p className="text-muted-foreground text-base text-pretty">
-                Connect actors to projects with defined timelines. Schedule runs or trigger them manually. Sync public Apify actors alongside your own — all from one dashboard.
-              </p>
-            </div>
-
-            <ul className="grid gap-4 sm:grid-cols-2">
-              {mainFeatures.map((feature, index) => (
-                <li key={index} className="group hover:bg-accent/5 flex items-start gap-3 p-2 rounded-lg transition-colors">
-                  <div className="mt-0.5 flex shrink-0 items-center justify-center">
-                    <feature.icon className="size-5 text-primary" aria-hidden="true" />
+        {/* Main Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          {mainFeatures.map((feature, index) => (
+            <Card key={index} className="border-border/50 hover:border-primary/30 transition-colors">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-primary/10 rounded-xl flex-shrink-0">
+                    <feature.icon className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-foreground font-medium">{feature.title}</h3>
-                    <p className="text-muted-foreground mt-1 text-sm">{feature.description}</p>
+                    <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
                   </div>
-                </li>
-              ))}
-            </ul>
-
-            <div className="flex flex-col sm:flex-row gap-4 pe-4 pt-2">
-              <Button size="lg" className="cursor-pointer" asChild>
-                <Link href="/auth/sign-up" className='flex items-center'>
-                  Start Free Trial
-                  <ArrowRight className="ms-2 size-4" aria-hidden="true" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="cursor-pointer" asChild>
-                <a href="#pricing">
-                  View Plans
-                </a>
-              </Button>
-            </div>
-          </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
-        {/* Second Feature Section - Flipped Layout */}
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-8 xl:gap-16">
-          {/* Left Content */}
-          <div className="space-y-6 order-2 lg:order-1">
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
-                One dataset from every run — not scattered files
-              </h3>
-              <p className="text-muted-foreground text-base text-pretty">
-                Unlike other platforms, Annalytick combines data from multiple runs of the same actor into a single, queryable dataset. Access it via API or export to Excel, CSV, and JSON.
-              </p>
+        {/* Secondary Features Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {secondaryFeatures.map((feature, index) => (
+            <div key={index} className="flex flex-col gap-3 p-4 rounded-xl border border-border/40 hover:border-primary/20 transition-colors bg-background/50">
+              <div className="p-2 bg-primary/10 rounded-lg w-fit">
+                <feature.icon className="h-5 w-5 text-primary" />
+              </div>
+              <h3 className="font-semibold text-sm">{feature.title}</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">{feature.description}</p>
             </div>
-
-            <ul className="grid gap-4 sm:grid-cols-2">
-              {secondaryFeatures.map((feature, index) => (
-                <li key={index} className="group hover:bg-accent/5 flex items-start gap-3 p-2 rounded-lg transition-colors">
-                  <div className="mt-0.5 flex shrink-0 items-center justify-center">
-                    <feature.icon className="size-5 text-primary" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <h3 className="text-foreground font-medium">{feature.title}</h3>
-                    <p className="text-muted-foreground mt-1 text-sm">{feature.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-            <div className="flex flex-col sm:flex-row gap-4 pe-4 pt-2">
-              <Button size="lg" className="cursor-pointer" asChild>
-                <a href="#about" className='flex items-center'>
-                  Learn More
-                  <ArrowRight className="ms-2 size-4" aria-hidden="true" />
-                </a>
-              </Button>
-              <Button size="lg" variant="outline" className="cursor-pointer" asChild>
-                <a href="#contact">
-                  Talk to Sales
-                </a>
-              </Button>
-            </div>
-          </div>
-
-          {/* Right Image */}
-          <Image3D
-            lightSrc="/feature-2-light.png"
-            darkSrc="/feature-2-dark.png"
-            alt="Data collection dashboard"
-            direction="right"
-            className="order-1 lg:order-2"
-          />
+          ))}
         </div>
       </div>
     </section>

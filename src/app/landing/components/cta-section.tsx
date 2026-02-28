@@ -1,7 +1,7 @@
 "use client"
 
 import Link from 'next/link'
-import { ArrowRight, TrendingUp, Zap } from 'lucide-react'
+import { ArrowRight, Star, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
@@ -16,19 +16,19 @@ export function CTASection() {
               {/* Badge and Stats */}
               <div className='flex flex-col items-center gap-4'>
                 <Badge variant='outline' className='flex items-center gap-2'>
-                  <TrendingUp className='size-3' />
-                  Start Scraping Smarter
+                  <Star className='size-3 fill-yellow-400 text-yellow-400' />
+                  Join 2,000+ SaaS & B2B teams
                 </Badge>
 
                 <div className='text-muted-foreground flex items-center gap-4 text-sm'>
                   <span className='flex items-center gap-1'>
                     <div className='size-2 rounded-full bg-green-500' />
-                    500+ Teams
+                    10M+ Reviews Managed
                   </span>
                   <Separator orientation='vertical' className='!h-4' />
-                  <span>1.2M+ Runs Tracked</span>
+                  <span>15+ Platforms</span>
                   <Separator orientation='vertical' className='!h-4' />
-                  <span>50M+ Data Points</span>
+                  <span>4.8★ Avg Rating Lift</span>
                 </div>
               </div>
 
@@ -39,7 +39,7 @@ export function CTASection() {
                   <span className='flex sm:inline-flex justify-center'>
                     <span className='relative mx-2'>
                       <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
-                        data pipeline
+                        online reputation
                       </span>
                       <div className='absolute start-0 -bottom-2 h-1 w-full bg-gradient-to-r from-primary/30 to-secondary/30' />
                     </span>
@@ -48,15 +48,15 @@ export function CTASection() {
                 </h1>
 
                 <p className='text-muted-foreground mx-auto max-w-3xl text-balance lg:text-xl'>
-                  Stop juggling spreadsheets and Apify tabs. Organize actors into projects, schedule runs,
-                  combine data from every execution into one dataset, and export to Excel, CSV, JSON, or access via API.
+                  Stop checking 15 different platforms manually. ReviewFlow aggregates all your reviews, alerts you instantly on new ones,
+                  helps you respond faster, and generates more reviews through smart campaigns.
                 </p>
               </div>
 
               {/* CTA Buttons */}
               <div className='flex flex-col justify-center gap-4 sm:flex-row sm:gap-6'>
                 <Button size='lg' className='cursor-pointer px-8 py-6 text-lg font-medium' asChild>
-                  <Link href='/auth/sign-up'>
+                  <Link href='/sign-up'>
                     <Zap className='me-2 size-5' />
                     Start Free Trial
                   </Link>
@@ -72,16 +72,16 @@ export function CTASection() {
               {/* Trust Indicators */}
               <div className='text-muted-foreground flex flex-wrap items-center justify-center gap-6 text-sm'>
                 <div className='flex items-center gap-2'>
-                    <div className='size-2 rounded-full bg-green-600 dark:bg-green-400 me-1' />
-                  <span>Free plan available</span>
+                  <div className='size-2 rounded-full bg-green-600 dark:bg-green-400 me-1' />
+                  <span>14-day free trial</span>
                 </div>
                 <div className='flex items-center gap-2'>
-                    <div className='size-2 rounded-full bg-blue-600 dark:bg-blue-400 me-1' />
+                  <div className='size-2 rounded-full bg-blue-600 dark:bg-blue-400 me-1' />
                   <span>No credit card required</span>
                 </div>
                 <div className='flex items-center gap-2'>
-                    <div className='size-2 rounded-full bg-purple-600 dark:bg-purple-400 me-1' />
-                  <span>Setup in under 2 minutes</span>
+                  <div className='size-2 rounded-full bg-purple-600 dark:bg-purple-400 me-1' />
+                  <span>Setup in 5 minutes</span>
                 </div>
               </div>
             </div>

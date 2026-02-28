@@ -1,51 +1,43 @@
 "use client"
 
-import {
-  Activity,
-  Database,
-  Users,
-  FolderKanban
-} from 'lucide-react'
+import { Star, MessageSquare, Users, Globe } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { DotPattern } from '@/components/dot-pattern'
 
-
 const stats = [
   {
-    icon: FolderKanban,
-    value: '2,500+',
-    label: 'Projects Managed',
-    description: 'Across all teams'
+    icon: Star,
+    value: '15+',
+    label: 'Review Platforms',
+    description: 'Google, G2, Capterra & more'
   },
   {
-    icon: Activity,
-    value: '1.2M+',
-    label: 'Runs Tracked',
-    description: 'Monthly executions'
-  },
-  {
-    icon: Database,
-    value: '50M+',
-    label: 'Data Points',
-    description: 'Collected & stored'
+    icon: MessageSquare,
+    value: '10M+',
+    label: 'Reviews Managed',
+    description: 'Across all customers'
   },
   {
     icon: Users,
-    value: '500+',
-    label: 'Teams',
-    description: 'Trust Annalytick'
+    value: '2,000+',
+    label: 'SaaS & B2B Teams',
+    description: 'Trust ReviewFlow'
+  },
+  {
+    icon: Globe,
+    value: '4.8★',
+    label: 'Average Rating Lift',
+    description: 'After 90 days on platform'
   }
 ]
 
 export function StatsSection() {
   return (
     <section className="py-12 sm:py-16 relative">
-      {/* Background with transparency */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/8 via-transparent to-secondary/20" />
       <DotPattern className="opacity-75" size="md" fadeStyle="circle" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-        {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {stats.map((stat, index) => (
             <Card

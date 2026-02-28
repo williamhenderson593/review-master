@@ -12,83 +12,83 @@ type Testimonial = {
 
 const testimonials: Testimonial[] = [
   {
-    name: 'Grace Muthoni',
-    role: 'Data Engineering Lead',
+    name: 'Sarah Mitchell',
+    role: 'Head of Marketing, CloudBase SaaS',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=female-1',
     quote:
-      'Annalytick replaced our messy spreadsheets and Slack threads. Now we have a single dashboard for every actor, every run, and every data point. Our team saves hours every week.',
+      'ReviewFlow replaced our manual process of checking 8 different platforms every morning. Now everything is in one inbox and we respond to reviews 3x faster.',
   },
   {
     name: 'James Oduor',
-    role: 'Head of Growth',
+    role: 'VP Customer Success, Growthly',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=male-1',
-    quote: 'The cost tracking alone paid for the subscription. We finally know exactly how much each scraping project costs us.',
+    quote: 'The AI reply suggestions are incredible. Our team went from dreading review responses to handling them in seconds. Our response rate went from 20% to 85%.',
   },
   {
     name: 'Priya Sharma',
-    role: 'Product Analyst',
+    role: 'Product Manager, Stackify',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=female-2',
     quote:
-      'The unified datastore is a game-changer. I can search across millions of scraped records, toggle columns, and export exactly what I need — no engineering help required.',
+      'The sentiment analytics helped us identify that "onboarding" was our biggest pain point. We fixed it and our G2 rating went from 3.8 to 4.6 in 3 months.',
   },
   {
-    name: 'Robert Njeru',
-    role: 'CTO, DataHarvest',
+    name: 'Robert Chen',
+    role: 'CEO, DevTools Pro',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=male-2',
     quote:
-      'We manage 40+ Apify actors across 12 projects. Before Annalytick, it was chaos. Now everything is organized, tracked, and visible to the whole team.',
+      'We used the review generation campaigns to go from 45 G2 reviews to 200+ in 60 days. The magic link feature made it incredibly easy for customers to leave reviews.',
   },
   {
     name: 'Maria Santos',
-    role: 'Freelance Data Consultant',
+    role: 'Digital Marketing Lead, HotelGroup',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=female-3',
     quote:
-      'I use Annalytick for all my client projects. The project-based organization and run history make it easy to show clients exactly what they are getting.',
+      'Managing TripAdvisor, Google, and Booking.com reviews for 12 properties used to take our team all day. ReviewFlow cut that to under an hour.',
   },
   {
     name: 'Thomas Wekesa',
-    role: 'Solutions Architect',
+    role: 'Founder, B2B SaaS Startup',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=male-3',
-    quote: 'Setting up was incredibly fast. We connected our Apify account and had full visibility into our actors within minutes.',
+    quote: 'The Slack integration is a game-changer. Our whole team sees new reviews in real time and we celebrate 5-star reviews together. It has changed our culture.',
   },
   {
     name: 'Lisa Achieng',
-    role: 'Operations Manager',
+    role: 'Customer Experience Manager',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=female-4',
     quote:
-      'The team collaboration features are exactly what we needed. I can invite analysts, assign them to projects, and everyone sees the same data. No more silos.',
+      'The "needs action" feature automatically flags reviews that require a response. Nothing falls through the cracks anymore. Our customers notice the difference.',
   },
   {
     name: 'Michael Kamau',
-    role: 'Backend Engineer',
+    role: 'Growth Lead, FinTech Platform',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=male-4',
-    quote: 'The one-click sync for both own and public Apify actors is brilliant. Managing actor configurations has never been easier.',
+    quote: 'We embed the review widget on our pricing page and it converts like crazy. Showing real customer reviews right where people are deciding to buy is powerful.',
   },
   {
     name: 'Sophie Wanjiku',
-    role: 'Business Intelligence Lead',
+    role: 'Agency Owner, Digital Reputation Co.',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=female-5',
     quote:
-      'Annalytick gives us the analytics layer we were missing. Run success rates, cost breakdowns, data volume trends — it is all there in beautiful charts.',
+      'I manage review management for 15 clients. ReviewFlow\'s multi-brand workspaces let me handle everything from one account. My clients love the weekly digest reports.',
   },
   {
     name: 'Daniel Otieno',
-    role: 'Startup Founder',
+    role: 'COO, E-commerce Platform',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=male-5',
-    quote: 'As a non-technical founder, Annalytick made web scraping manageable. I can see what is running, what it costs, and what data we are collecting.',
+    quote: 'The competitor tracking feature showed us exactly where we were losing ground on Capterra. We fixed those issues and closed the gap within a quarter.',
   },
   {
     name: 'Natasha Omondi',
-    role: 'Research Lead',
+    role: 'Head of Product, SaaS Company',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=female-6',
     quote:
-      'We run competitive intelligence scraping across dozens of websites. Annalytick keeps everything organized by project and gives us instant access to historical data.',
+      'ReviewFlow\'s topic extraction automatically tags reviews by theme. We now have a live feed of what customers say about pricing, support, and UX — invaluable for roadmap planning.',
   },
   {
     name: 'Carlos Rivera',
-    role: 'Agency Director',
+    role: 'Marketing Director, B2B Software',
     image: 'https://notion-avatars.netlify.app/api/avatar?preset=male-6',
-    quote: 'We manage scraping for 8 different clients. Annalytick project separation keeps everything clean and accountable.',
+    quote: 'The testimonial library is something I didn\'t know I needed. Our sales team now pulls quotes directly from ReviewFlow for proposals. Closed deals faster.',
   },
 ]
 
@@ -137,7 +137,7 @@ export function TestimonialsSection() {
             Testimonial
           </p>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Loved by data teams everywhere
+            Loved by SaaS and B2B teams everywhere
           </h2>
         </div>
       </div>
