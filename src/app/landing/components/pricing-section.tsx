@@ -1,6 +1,6 @@
 "use client"
 
-import { Check } from 'lucide-react'
+import { Check, Zap, Star, Crown, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
@@ -9,71 +9,81 @@ import Link from 'next/link'
 
 const plans = [
   {
-    name: 'Starter',
-    description: 'For small businesses getting started with review management',
-    monthlyPrice: 0,
-    yearlyPrice: 0,
+    id: 'lite',
+    name: 'Lite',
+    icon: Zap,
+    description: 'For businesses getting started with review monitoring',
+    pricePerProfile: 20,
+    annualPricePerProfile: 16,
+    defaultProfiles: 3,
+    maxMembers: 2,
+    channels: 1,
+    automations: 1,
     features: [
-      '3 review profiles',
-      '2 platforms connected',
-      'Unified review inbox',
-      'Basic analytics',
-      '1 team member',
-      '1 campaign',
-      'Email notifications',
-      'Community support'
+      '3 review profiles included',
+      'Access, search & export all past reviews',
+      'Track & send new reviews to Slack, Email, MS Teams or Zapier',
+      'Filter notifications by language, source, and keyword',
+      'Build custom reports',
+      '1 channel & automation flow per review profile',
+      '2 team members',
     ],
     cta: 'Get Started Free',
-    popular: false
+    popular: false,
   },
   {
-    name: 'Growth',
-    description: 'For growing SaaS and B2B teams that need full review management',
-    monthlyPrice: 49,
-    yearlyPrice: 39,
+    id: 'pro',
+    name: 'Pro',
+    icon: Star,
+    description: 'For growing teams that need full review management',
+    pricePerProfile: 35,
+    annualPricePerProfile: 28,
+    defaultProfiles: 3,
+    maxMembers: 5,
+    channels: 2,
+    automations: 2,
     features: [
-      '15 review profiles',
-      'All 15+ platforms',
-      'AI reply suggestions',
-      'Sentiment analytics',
-      'Up to 5 team members',
-      'Unlimited campaigns',
-      'Review widgets (3)',
-      'Slack & email integrations',
-      'Competitor tracking (3)',
-      'Weekly digest emails',
-      'Priority support'
+      'Everything in Lite, plus:',
+      'Advanced review monitoring: replies, updates & deletions',
+      'Reply to reviews from ReviewFlow & Slack with AI suggestions',
+      'Review widgets to showcase your best reviews',
+      'Automate daily, weekly or monthly reports',
+      'Magic review collection links & QR codes',
+      '2 channels & automation flows per review profile',
+      '5 team members',
     ],
     cta: 'Start Free Trial',
     popular: true,
-    includesPrevious: 'Everything in Starter, plus'
   },
   {
-    name: 'Enterprise',
-    description: 'For agencies and large organizations managing multiple brands',
-    monthlyPrice: 149,
-    yearlyPrice: 119,
+    id: 'premium',
+    name: 'Premium',
+    icon: Crown,
+    description: 'For teams that need AI-powered review management',
+    pricePerProfile: 40,
+    annualPricePerProfile: 32,
+    defaultProfiles: 3,
+    maxMembers: 15,
+    channels: 5,
+    automations: 5,
     features: [
-      'Unlimited review profiles',
-      'Unlimited team members',
-      'Multiple brand workspaces',
-      'SSO / SAML authentication',
-      'Custom AI agent profiles',
-      'Advanced automations',
-      'Unlimited widgets',
-      'HubSpot & Salesforce sync',
-      'Dedicated account manager',
-      'SLA & uptime guarantee',
-      'Custom API access'
+      'Everything in Pro, plus:',
+      'AI or Template Auto-replies',
+      'Review collection forms',
+      'AI Sentiment Analysis',
+      'Language detection & automated translation',
+      '5 channels & automation flows per review profile',
+      '15 team members',
+      'Priority support',
     ],
-    cta: 'Contact Sales',
+    cta: 'Start Free Trial',
     popular: false,
-    includesPrevious: 'Everything in Growth, plus'
-  }
+  },
 ]
 
 export function PricingSection() {
   const [isYearly, setIsYearly] = useState(false)
+  const [profileCount, setProfileCount] = useState(3)
 
   return (
     <section id="pricing" className="py-24 sm:py-32 bg-muted/40">
@@ -82,10 +92,11 @@ export function PricingSection() {
         <div className="mx-auto max-w-2xl text-center mb-12">
           <Badge variant="outline" className="mb-4">Pricing Plans</Badge>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            Simple, transparent pricing
+            Simple, per-profile pricing
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Start free and scale as your review management needs grow. No hidden fees — just the tools you need to win more reviews and protect your reputation.
+            Pay only for the review profiles you need. Start with 3 and scale as you grow.
+            14-day free trial, no credit card required.
           </p>
 
           {/* Billing Toggle */}
@@ -114,90 +125,132 @@ export function PricingSection() {
           <p className="text-sm text-muted-foreground">
             <span className="text-primary font-semibold">Save 20%</span> on annual billing
           </p>
+
+          {/* Profile Count Selector */}
+          <div className="flex items-center justify-center gap-4 mt-6">
+            <span className="text-sm text-muted-foreground">Review profiles:</span>
+            <div className="flex items-center gap-2">
+              {[1, 3, 5, 10, 20].map(count => (
+                <button
+                  key={count}
+                  onClick={() => setProfileCount(count)}
+                  className={`rounded-full px-3 py-1 text-sm transition-colors ${
+                    profileCount === count
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted hover:bg-muted/80"
+                  }`}
+                >
+                  {count}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Pricing Cards */}
         <div className="mx-auto max-w-6xl">
           <div className="rounded-xl border">
             <div className="grid lg:grid-cols-3">
-              {plans.map((plan, index) => (
-                <div
-                  key={index}
-                  className={`p-8 grid grid-rows-subgrid row-span-4 gap-6 ${
-                    plan.popular
-                      ? 'my-2 mx-4 rounded-xl bg-card border-transparent shadow-xl ring-1 ring-foreground/10 backdrop-blur'
-                      : ''
-                  }`}
-                >
-                  {/* Plan Header */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="text-lg font-medium tracking-tight">{plan.name}</div>
-                      {plan.popular && <Badge className="text-xs">Most Popular</Badge>}
-                    </div>
-                    <div className="text-muted-foreground text-balance text-sm">{plan.description}</div>
-                  </div>
+              {plans.map((plan, index) => {
+                const pricePerProfile = isYearly ? plan.annualPricePerProfile : plan.pricePerProfile
+                const totalPrice = pricePerProfile * profileCount
+                const Icon = plan.icon
 
-                  {/* Pricing */}
-                  <div>
-                    <div className="text-4xl font-bold mb-1">
-                      {plan.name === 'Starter' ? (
-                        '$0'
-                      ) : (
-                        `$${isYearly ? plan.yearlyPrice : plan.monthlyPrice}`
-                      )}
+                return (
+                  <div
+                    key={index}
+                    className={`p-8 grid grid-rows-subgrid row-span-5 gap-4 ${
+                      plan.popular
+                        ? 'my-2 mx-4 rounded-xl bg-card border-transparent shadow-xl ring-1 ring-foreground/10 backdrop-blur'
+                        : ''
+                    }`}
+                  >
+                    {/* Plan Header */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className={`rounded-lg p-1.5 ${
+                          plan.id === 'lite' ? 'bg-blue-100 text-blue-600' :
+                          plan.id === 'pro' ? 'bg-primary/10 text-primary' :
+                          'bg-yellow-100 text-yellow-600'
+                        }`}>
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <div className="text-lg font-medium tracking-tight">{plan.name}</div>
+                        {plan.popular && <Badge className="text-xs">Most Popular</Badge>}
+                      </div>
+                      <div className="text-muted-foreground text-balance text-sm">{plan.description}</div>
                     </div>
-                    <div className="text-muted-foreground text-sm">
-                      {plan.name === 'Starter' ? 'Free forever' : plan.name === 'Enterprise' ? 'Per month, billed annually' : 'Per month'}
+
+                    {/* Pricing */}
+                    <div>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-4xl font-bold">${pricePerProfile}</span>
+                        <span className="text-muted-foreground text-sm">/ profile / month</span>
+                      </div>
+                      <div className="text-sm text-muted-foreground mt-1">
+                        Total: <span className="font-semibold text-foreground">${totalPrice}/mo</span>
+                        {' '}for {profileCount} profile{profileCount !== 1 ? "s" : ""}
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        <Badge variant="secondary" className="text-xs gap-1">
+                          <Users className="h-3 w-3" />
+                          {plan.maxMembers} members
+                        </Badge>
+                        <Badge variant="secondary" className="text-xs">
+                          {plan.channels} channel{plan.channels > 1 ? "s" : ""}
+                        </Badge>
+                      </div>
+                    </div>
+
+                    {/* CTA Button */}
+                    <div>
+                      <Button
+                        className={`w-full cursor-pointer my-2 gap-2 ${
+                          plan.popular
+                            ? 'shadow-md border-[0.5px] border-white/25 shadow-black/20 bg-primary ring-1 ring-primary/15 text-primary-foreground hover:bg-primary/90'
+                            : 'shadow-sm shadow-black/15 border border-transparent bg-background ring-1 ring-foreground/10 hover:bg-muted/50'
+                        }`}
+                        variant={plan.popular ? 'default' : 'secondary'}
+                        asChild
+                      >
+                        <Link href="/sign-up">
+                          <Zap className="h-4 w-4" />
+                          {plan.cta}
+                        </Link>
+                      </Button>
+                    </div>
+
+                    {/* Features */}
+                    <div>
+                      <ul role="list" className="space-y-2.5 text-sm">
+                        {plan.features.map((feature, featureIndex) => (
+                          <li key={featureIndex} className={`flex items-start gap-2.5 ${
+                            feature.startsWith("Everything") ? "font-medium text-foreground" : "text-muted-foreground"
+                          }`}>
+                            {!feature.startsWith("Everything") && (
+                              <Check className="text-green-500 size-4 flex-shrink-0 mt-0.5" strokeWidth={2.5} />
+                            )}
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
-
-                  {/* CTA Button */}
-                  <div>
-                    <Button
-                      className={`w-full cursor-pointer my-2 ${
-                        plan.popular
-                          ? 'shadow-md border-[0.5px] border-white/25 shadow-black/20 bg-primary ring-1 ring-primary/15 text-primary-foreground hover:bg-primary/90'
-                          : 'shadow-sm shadow-black/15 border border-transparent bg-background ring-1 ring-foreground/10 hover:bg-muted/50'
-                      }`}
-                      variant={plan.popular ? 'default' : 'secondary'}
-                      asChild
-                    >
-                      <Link href={plan.name === 'Enterprise' ? '#contact' : '/sign-up'}>
-                        {plan.cta}
-                      </Link>
-                    </Button>
-                  </div>
-
-                  {/* Features */}
-                  <div>
-                    <ul role="list" className="space-y-3 text-sm">
-                      {plan.includesPrevious && (
-                        <li className="flex items-center gap-3 font-medium">
-                          {plan.includesPrevious}:
-                        </li>
-                      )}
-                      {plan.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="flex items-center gap-3">
-                          <Check className="text-muted-foreground size-4 flex-shrink-0" strokeWidth={2.5} />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </div>
 
-        {/* Trial Note */}
-        <div className="mt-12 text-center">
+        {/* Footer Note */}
+        <div className="mt-12 text-center space-y-2">
           <p className="text-muted-foreground text-sm">
-            All paid plans include a <strong>14-day free trial</strong>. No credit card required.
-            {' '}
+            All plans include a <strong>14-day free trial</strong>. No credit card required.
+          </p>
+          <p className="text-muted-foreground text-sm">
+            Need more than 20 profiles or custom enterprise features?{' '}
             <Button variant="link" className="p-0 h-auto cursor-pointer text-sm" asChild>
-              <a href="#contact">Questions? Talk to us →</a>
+              <a href="#contact">Contact us →</a>
             </Button>
           </p>
         </div>
