@@ -19,6 +19,7 @@ import {
   Building2,
   Globe,
   Bell,
+  Lightbulb,
 } from "lucide-react"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
@@ -72,6 +73,11 @@ const data = {
           title: "Analytics",
           url: "/analytics",
           icon: BarChart3,
+        },
+        {
+          title: "Insights",
+          url: "/insights",
+          icon: Lightbulb,
         },
       ],
     },

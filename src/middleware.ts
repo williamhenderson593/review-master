@@ -24,6 +24,7 @@ const protectedPaths = [
   '/reviews',
   '/review-profiles',
   '/analytics',
+  '/insights',
   '/automations',
   '/campaigns',
   '/contacts',
