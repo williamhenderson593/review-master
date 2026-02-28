@@ -14,10 +14,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import {
   Star, Search, Filter, MessageSquare, Flag, Tag, ThumbsUp, ThumbsDown,
   Minus, ExternalLink, RefreshCw, AlertCircle, CheckCircle2, Clock,
-  ChevronRight, Send, Sparkles, Globe, X
+  ChevronRight, Send, Sparkles, Globe, X, Code2, Copy, Key
 } from "lucide-react"
 import { toast } from "sonner"
 import { format } from "date-fns"
+import Link from "next/link"
 
 const PLATFORMS = [
   { value: "all", label: "All Platforms" },
@@ -243,6 +244,10 @@ export default function ReviewsPage() {
             </TabsTrigger>
             <TabsTrigger value="replied">Replied</TabsTrigger>
             <TabsTrigger value="flagged">Flagged</TabsTrigger>
+            <TabsTrigger value="api" className="gap-1.5">
+              <Code2 className="h-3.5 w-3.5" />
+              API Access
+            </TabsTrigger>
           </TabsList>
 
           {/* Filters */}
@@ -529,6 +534,238 @@ export default function ReviewsPage() {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* API Access Tab */}
+        <TabsContent value="api" className="flex-1 min-h-0 mt-0 overflow-y-auto">
+          <div className="space-y-6 py-2">
+            {/* Intro */}
+            <div className="rounded-lg border bg-muted/30 p-5">
+              <div className="flex items-start gap-3">
+                <div className="rounded-lg bg-primary/10 p-2 flex-shrink-0">
+                  <Code2 className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">Access Your Reviews via API</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Use your API key to fetch review data programmatically. Integrate reviews into your own apps, dashboards, or data pipelines.
+                  </p>
+                  <Button variant="outline" size="sm" className="gap-2 mt-3" asChild>
+                    <Link href="/settings/api-keys">
+                      <Key className="h-4 w-4" />
+                      Manage API Keys
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Authentication */}
+            <div className="space-y-3">
+              <h3 className="font-semibold text-sm">Authentication</h3>
+              <p className="text-sm text-muted-foreground">
+                All API requests require your API key in the Authorization header:
+              </p>
+              <div className="relative">
+                <code className="block rounded-lg bg-muted p-3 text-xs font-mono">
+                  Authorization: Bearer YOUR_API_KEY
+                </code>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-2 h-6 w-6"
+                  onClick={() => {
+                    navigator.clipboard.writeText("Authorization: Bearer YOUR_API_KEY")
+                    toast.success("Copied!")
+                  }}
+                >
+                  <Copy className="h-3 w-3" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Endpoints */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-sm">Available Endpoints</h3>
+
+              {[
+                {
+                  method: "GET",
+                  endpoint: "/api/public/v1/reviews",
+                  description: "List all reviews with filtering and pagination",
+                  params: [
+                    { name: "profileId", type: "string", desc: "Filter by review profile ID" },
+                    { name: "platform", type: "string", desc: "Filter by platform (google, tripadvisor, g2, etc.)" },
+                    { name: "rating", type: "number", desc: "Exact star rating (1-5)" },
+                    { name: "minRating", type: "number", desc: "Minimum star rating" },
+                    { name: "maxRating", type: "number", desc: "Maximum star rating" },
+                    { name: "sentiment", type: "string", desc: "positive | neutral | negative" },
+                    { name: "dateFrom", type: "ISO date", desc: "Reviews from this date" },
+                    { name: "dateTo", type: "ISO date", desc: "Reviews to this date" },
+                    { name: "language", type: "string", desc: "Language code (en, fr, de, etc.)" },
+                    { name: "needsAction", type: "boolean", desc: "Only reviews needing action" },
+                    { name: "page", type: "number", desc: "Page number (default: 1)" },
+                    { name: "limit", type: "number", desc: "Results per page (max: 100, default: 20)" },
+                  ],
+                  example: `curl -X GET \\
+  "https://app.reviewflow.com/api/public/v1/reviews?platform=tripadvisor&minRating=4&limit=10" \\
+  -H "Authorization: Bearer YOUR_API_KEY"`,
+                  response: `{
+  "data": [
+    {
+      "id": "uuid",
+      "platform": "tripadvisor",
+      "rating": 5,
+      "title": "Amazing experience!",
+      "body": "The service was excellent...",
+      "authorName": "John D.",
+      "reviewedAt": "2025-06-08T00:00:00Z",
+      "sentiment": "positive",
+      "topics": ["service", "location"],
+      "language": "en",
+      "profileName": "My Hotel - TripAdvisor"
+    }
+  ],
+  "meta": {
+    "total": 150,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 15,
+    "hasNextPage": true
+  },
+  "summary": {
+    "totalReviews": 150,
+    "avgRating": "4.20",
+    "sentimentBreakdown": {
+      "positive": 120,
+      "neutral": 20,
+      "negative": 10
+    }
+  }
+}`,
+                },
+                {
+                  method: "GET",
+                  endpoint: "/api/public/v1/profiles",
+                  description: "List all connected review profiles",
+                  params: [],
+                  example: `curl -X GET \\
+  "https://app.reviewflow.com/api/public/v1/profiles" \\
+  -H "Authorization: Bearer YOUR_API_KEY"`,
+                  response: `{
+  "data": [
+    {
+      "id": "uuid",
+      "name": "My Hotel - TripAdvisor",
+      "platform": "tripadvisor",
+      "profileUrl": "https://www.tripadvisor.com/...",
+      "isActive": true,
+      "syncStatus": "synced",
+      "lastSyncedAt": "2025-06-11T18:16:33Z"
+    }
+  ],
+  "meta": { "total": 3 }
+}`,
+                },
+                {
+                  method: "GET",
+                  endpoint: "/api/public/v1/stats",
+                  description: "Get review statistics and analytics",
+                  params: [
+                    { name: "profileId", type: "string", desc: "Filter by review profile ID" },
+                    { name: "dateFrom", type: "ISO date", desc: "Stats from this date" },
+                    { name: "dateTo", type: "ISO date", desc: "Stats to this date" },
+                  ],
+                  example: `curl -X GET \\
+  "https://app.reviewflow.com/api/public/v1/stats?profileId=YOUR_PROFILE_ID" \\
+  -H "Authorization: Bearer YOUR_API_KEY"`,
+                  response: `{
+  "data": {
+    "totalReviews": 150,
+    "avgRating": "4.20",
+    "responseRate": 65,
+    "sentimentBreakdown": {
+      "positive": 120,
+      "neutral": 20,
+      "negative": 10
+    },
+    "ratingBreakdown": {
+      "1": 5, "2": 5, "3": 10, "4": 30, "5": 100
+    },
+    "platformBreakdown": [
+      { "platform": "tripadvisor", "count": 100, "avgRating": "4.50" },
+      { "platform": "google", "count": 50, "avgRating": "3.80" }
+    ]
+  }
+}`,
+                },
+              ].map((api, i) => (
+                <div key={i} className="rounded-lg border overflow-hidden">
+                  <div className="flex items-center gap-3 bg-muted/50 px-4 py-3 border-b">
+                    <Badge variant="secondary" className="text-xs font-mono font-bold">{api.method}</Badge>
+                    <code className="text-sm font-mono text-primary font-medium">{api.endpoint}</code>
+                  </div>
+                  <div className="p-4 space-y-4">
+                    <p className="text-sm text-muted-foreground">{api.description}</p>
+
+                    {api.params.length > 0 && (
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Parameters</p>
+                        <div className="space-y-1.5">
+                          {api.params.map(param => (
+                            <div key={param.name} className="flex items-start gap-3 text-xs">
+                              <code className="font-mono text-primary bg-primary/5 px-1.5 py-0.5 rounded flex-shrink-0">{param.name}</code>
+                              <span className="text-muted-foreground">{param.type}</span>
+                              <span className="text-muted-foreground">— {param.desc}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Example Request</p>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 gap-1 text-xs"
+                          onClick={() => {
+                            navigator.clipboard.writeText(api.example)
+                            toast.success("Copied!")
+                          }}
+                        >
+                          <Copy className="h-3 w-3" />
+                          Copy
+                        </Button>
+                      </div>
+                      <pre className="rounded bg-muted p-3 text-xs font-mono overflow-x-auto whitespace-pre-wrap">{api.example}</pre>
+                    </div>
+
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1.5">Example Response</p>
+                      <pre className="rounded bg-muted p-3 text-xs font-mono overflow-x-auto max-h-48 overflow-y-auto">{api.response}</pre>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Rate Limits */}
+            <div className="rounded-lg border p-4 space-y-2">
+              <h3 className="font-semibold text-sm flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-orange-500" />
+                Rate Limits & Notes
+              </h3>
+              <ul className="space-y-1.5 text-sm text-muted-foreground">
+                <li>• Rate limit: 100 requests per minute per API key</li>
+                <li>• Maximum 100 results per page (use pagination for more)</li>
+                <li>• API keys can be created and managed in <Link href="/settings/api-keys" className="text-primary underline">Settings → API Keys</Link></li>
+                <li>• Keys are scoped to your organization — you can only access your own data</li>
+                <li>• Revoked or expired keys return <code className="bg-muted px-1 rounded text-xs">401 Unauthorized</code></li>
+              </ul>
             </div>
           </div>
         </TabsContent>
