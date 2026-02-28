@@ -18,7 +18,6 @@ import {
   Key,
   Building2,
   Globe,
-  TrendingUp,
   Bell,
 } from "lucide-react"
 import Link from "next/link"
@@ -93,6 +92,11 @@ const data = {
           title: "Automations",
           url: "/automations",
           icon: Zap,
+        },
+        {
+          title: "Notifications",
+          url: "/settings/notifications",
+          icon: Bell,
         },
       ],
     },
