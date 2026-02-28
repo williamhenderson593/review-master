@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Loader2, Plus, Trash2, Key, Copy, Check, AlertCircle } from "lucide-react"
+import { Loader2, Plus, Trash2, Key, Copy, Check, AlertCircle, Code2, ExternalLink, BookOpen } from "lucide-react"
 import { toast } from "sonner"
 import { format } from "date-fns"
 
@@ -316,6 +316,71 @@ export default function ApiKeysPage() {
               </TableBody>
             </Table>
           )}
+        </CardContent>
+      </Card>
+
+      {/* API Documentation */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <BookOpen className="h-5 w-5 text-primary" />
+            Public API Documentation
+          </CardTitle>
+          <CardDescription>
+            Use your API key to access your review data programmatically.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="rounded-lg bg-muted p-4 space-y-3">
+            <p className="text-sm font-semibold">Authentication</p>
+            <p className="text-xs text-muted-foreground">Pass your API key in the Authorization header:</p>
+            <code className="block text-xs bg-background rounded p-2 font-mono">
+              Authorization: Bearer YOUR_API_KEY
+            </code>
+          </div>
+
+          <div className="space-y-3">
+            {[
+              {
+                method: "GET",
+                endpoint: "/api/public/v1/reviews",
+                description: "List reviews with filters",
+                params: "profileId, platform, rating, minRating, maxRating, sentiment, dateFrom, dateTo, language, page, limit",
+              },
+              {
+                method: "GET",
+                endpoint: "/api/public/v1/profiles",
+                description: "List all review profiles",
+                params: "none",
+              },
+              {
+                method: "GET",
+                endpoint: "/api/public/v1/stats",
+                description: "Get review statistics",
+                params: "profileId, dateFrom, dateTo",
+              },
+            ].map(api => (
+              <div key={api.endpoint} className="rounded-lg border p-3 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary" className="text-xs font-mono">{api.method}</Badge>
+                  <code className="text-xs font-mono text-primary">{api.endpoint}</code>
+                </div>
+                <p className="text-xs text-muted-foreground">{api.description}</p>
+                <p className="text-xs text-muted-foreground">
+                  <span className="font-medium">Parameters:</span> {api.params}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="rounded-lg bg-muted p-4 space-y-2">
+            <p className="text-sm font-semibold">Example Request</p>
+            <code className="block text-xs bg-background rounded p-2 font-mono whitespace-pre-wrap">
+{`curl -X GET \\
+  "https://app.reviewflow.com/api/public/v1/reviews?platform=tripadvisor&minRating=4&limit=10" \\
+  -H "Authorization: Bearer YOUR_API_KEY"`}
+            </code>
+          </div>
         </CardContent>
       </Card>
 

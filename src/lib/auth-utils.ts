@@ -1,8 +1,9 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/lib/db";
-import { user, clients, roles } from "@/lib/schema";
-import { eq } from "drizzle-orm";
+import { user, clients, roles, clientApiKeys } from "@/lib/schema";
+import { eq, and } from "drizzle-orm";
+import { hashApiKey } from "@/lib/encryption";
 
 export async function getSession() {
   const session = await auth.api.getSession({
@@ -66,4 +67,49 @@ export async function requireSuperAdmin() {
 
 export function isSuperAdmin(roleName: string | null | undefined): boolean {
   return roleName === "super_admin";
+}
+
+// ─── API Key Authentication ──────────────────────────────────────────────────
+// Used for public API access (Bearer token in Authorization header)
+export async function authenticateApiKey(apiKey: string): Promise<{
+  clientId: string
+  keyId: string
+} | null> {
+  if (!apiKey) return null;
+
+  try {
+    const keyHash = hashApiKey(apiKey);
+
+    const [key] = await db
+      .select({
+        id: clientApiKeys.id,
+        clientId: clientApiKeys.clientId,
+        isActive: clientApiKeys.isActive,
+        expiresAt: clientApiKeys.expiresAt,
+      })
+      .from(clientApiKeys)
+      .where(and(eq(clientApiKeys.keyHash, keyHash), eq(clientApiKeys.isActive, true)));
+
+    if (!key) return null;
+
+    // Check expiry
+    if (key.expiresAt && new Date(key.expiresAt) < new Date()) return null;
+
+    // Update last used
+    await db
+      .update(clientApiKeys)
+      .set({ lastUsedAt: new Date() })
+      .where(eq(clientApiKeys.id, key.id));
+
+    return { clientId: key.clientId, keyId: key.id };
+  } catch {
+    return null;
+  }
+}
+
+// Extract API key from Authorization header: "Bearer tlv_xxx" or "ApiKey tlv_xxx"
+export function extractApiKey(authHeader: string | null): string | null {
+  if (!authHeader) return null;
+  const match = authHeader.match(/^(?:Bearer|ApiKey)\s+(.+)$/i);
+  return match ? match[1] : null;
 }
