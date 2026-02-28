@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
-import { Plus, Globe, RefreshCw, Trash2, ExternalLink, AlertCircle, CheckCircle2, Clock } from "lucide-react"
+import { Plus, Globe, RefreshCw, Trash2, ExternalLink, AlertCircle, CheckCircle2, Clock, Sparkles, X } from "lucide-react"
 import { toast } from "sonner"
 
 const PLATFORMS = [
@@ -80,6 +80,7 @@ export default function ReviewProfilesPage() {
     isCompetitor: false,
   })
   const [submitting, setSubmitting] = useState(false)
+  const [simulating, setSimulating] = useState<string | null>(null)
 
   useEffect(() => {
     fetchProfiles()
@@ -119,6 +120,25 @@ export default function ReviewProfilesPage() {
       toast.error("Failed to create review profile")
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  async function handleSimulateReviews(profileId?: string) {
+    setSimulating(profileId || "new")
+    try {
+      const res = await fetch("/api/v1/seed-reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profileId }),
+      })
+      if (!res.ok) throw new Error("Failed to simulate")
+      const data = await res.json()
+      toast.success(`Simulated ${data.inserted} TripAdvisor reviews! (${data.skipped} already existed)`)
+      fetchProfiles()
+    } catch {
+      toast.error("Failed to simulate reviews")
+    } finally {
+      setSimulating(null)
     }
   }
 
@@ -162,13 +182,23 @@ export default function ReviewProfilesPage() {
             Connect your business profiles from review platforms to start collecting and monitoring reviews.
           </p>
         </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              Add Profile
-            </Button>
-          </DialogTrigger>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            className="gap-2"
+            onClick={() => handleSimulateReviews()}
+            disabled={simulating !== null}
+          >
+            {simulating === "new" ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            Simulate TripAdvisor Reviews
+          </Button>
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                Add Profile
+              </Button>
+            </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
               <DialogTitle>Add Review Profile</DialogTitle>
@@ -229,13 +259,18 @@ export default function ReviewProfilesPage() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleCreate} disabled={submitting}>
+              <Button variant="outline" onClick={() => setDialogOpen(false)} className="gap-2">
+                <X className="h-4 w-4" />
+                Cancel
+              </Button>
+              <Button onClick={handleCreate} disabled={submitting} className="gap-2">
+                {submitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
                 {submitting ? "Creating..." : "Add Profile"}
               </Button>
             </DialogFooter>
           </DialogContent>
-        </Dialog>
+          </Dialog>
+        </div>
       </div>
 
       {/* Stats */}

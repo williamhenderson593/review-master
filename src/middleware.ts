@@ -49,6 +49,7 @@ export async function middleware(request: NextRequest) {
     const isStaticOrApi = pathname.startsWith('/api') ||
       pathname.startsWith('/_next') ||
       pathname.startsWith('/favicon') ||
+      pathname.startsWith('/r/') || // magic links are public
       /\.(png|jpg|jpeg|gif|svg|webp|ico|css|js)$/i.test(pathname)
 
     if (isLandingPath || isStaticOrApi) {

@@ -9,7 +9,7 @@ import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from "recharts"
-import { Star, TrendingUp, TrendingDown, MessageSquare, ThumbsUp, ThumbsDown, Minus, AlertCircle } from "lucide-react"
+import { Star, TrendingUp, TrendingDown, MessageSquare, ThumbsUp, ThumbsDown, Minus, AlertCircle, Globe } from "lucide-react"
 import { toast } from "sonner"
 
 interface ReviewStats {
@@ -20,6 +20,14 @@ interface ReviewStats {
   sentimentBreakdown: Array<{ sentiment: string | null; count: number }>
   platformBreakdown: Array<{ platform: string; count: number; avgRating: string | null }>
   ratingBreakdown: Array<{ rating: number | null; count: number }>
+  profileBreakdown: Array<{ profileId: string; profileName: string; count: number; avgRating: string | null }>
+  filteredByProfile: string | null
+}
+
+interface ReviewProfile {
+  id: string
+  name: string
+  platform: string
 }
 
 const SENTIMENT_COLORS = {
@@ -86,17 +94,29 @@ function StatCard({
 
 export default function AnalyticsPage() {
   const [stats, setStats] = useState<ReviewStats | null>(null)
+  const [profiles, setProfiles] = useState<ReviewProfile[]>([])
   const [loading, setLoading] = useState(true)
   const [period, setPeriod] = useState("30d")
+  const [selectedProfile, setSelectedProfile] = useState("all")
+
+  useEffect(() => {
+    // Load profiles for the filter
+    fetch("/api/v1/review-profiles")
+      .then(r => r.json())
+      .then(d => setProfiles(d.profiles || []))
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     fetchStats()
-  }, [period])
+  }, [period, selectedProfile])
 
   async function fetchStats() {
     setLoading(true)
     try {
-      const res = await fetch("/api/v1/reviews/stats")
+      const params = new URLSearchParams()
+      if (selectedProfile !== "all") params.set("profileId", selectedProfile)
+      const res = await fetch(`/api/v1/reviews/stats?${params}`)
       const data = await res.json()
       setStats(data)
     } catch {
@@ -132,23 +152,47 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6 px-4 lg:px-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Analytics</h1>
-          <p className="text-muted-foreground">Track your review performance and sentiment trends</p>
+          <p className="text-muted-foreground">
+            Track your review performance and sentiment trends
+            {selectedProfile !== "all" && stats?.filteredByProfile && (
+              <span className="ml-2 text-primary font-medium">
+                — {profiles.find(p => p.id === selectedProfile)?.name || "Selected Profile"}
+              </span>
+            )}
+          </p>
         </div>
-        <Select value={period} onValueChange={setPeriod}>
-          <SelectTrigger className="w-36">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="7d">Last 7 days</SelectItem>
-            <SelectItem value="30d">Last 30 days</SelectItem>
-            <SelectItem value="90d">Last 90 days</SelectItem>
-            <SelectItem value="1y">Last year</SelectItem>
-            <SelectItem value="all">All time</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-2">
+          {/* Profile Filter */}
+          <Select value={selectedProfile} onValueChange={setSelectedProfile}>
+            <SelectTrigger className="w-52">
+              <Globe className="h-4 w-4 mr-1.5 text-muted-foreground" />
+              <SelectValue placeholder="All Profiles" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Profiles</SelectItem>
+              {profiles.map(p => (
+                <SelectItem key={p.id} value={p.id}>
+                  {p.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={period} onValueChange={setPeriod}>
+            <SelectTrigger className="w-36">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="7d">Last 7 days</SelectItem>
+              <SelectItem value="30d">Last 30 days</SelectItem>
+              <SelectItem value="90d">Last 90 days</SelectItem>
+              <SelectItem value="1y">Last year</SelectItem>
+              <SelectItem value="all">All time</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Stats Cards */}
@@ -204,6 +248,7 @@ export default function AnalyticsPage() {
           <TabsTrigger value="sentiment">Sentiment</TabsTrigger>
           <TabsTrigger value="platforms">Platforms</TabsTrigger>
           <TabsTrigger value="ratings">Ratings</TabsTrigger>
+          {selectedProfile === "all" && <TabsTrigger value="profiles">By Profile</TabsTrigger>}
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4 mt-4">
@@ -447,6 +492,63 @@ export default function AnalyticsPage() {
                   })}
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Per Profile Tab */}
+        <TabsContent value="profiles" className="space-y-4 mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Performance by Review Profile</CardTitle>
+              <CardDescription>Compare review volume and ratings across all your connected profiles</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {!stats || !stats.profileBreakdown || stats.profileBreakdown.length === 0 ? (
+                <div className="flex items-center justify-center h-48 text-muted-foreground">
+                  No profile data available. Connect review profiles to see per-profile analytics.
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {stats.profileBreakdown.map((profile, i) => {
+                    const maxCount = Math.max(...stats.profileBreakdown.map(p => p.count))
+                    const percent = maxCount > 0 ? Math.round((profile.count / maxCount) * 100) : 0
+                    const avgRating = parseFloat(profile.avgRating || "0")
+                    return (
+                      <div key={profile.profileId} className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <button
+                              className="text-sm font-medium hover:text-primary transition-colors text-left"
+                              onClick={() => setSelectedProfile(profile.profileId)}
+                            >
+                              {profile.profileName}
+                            </button>
+                          </div>
+                          <div className="flex items-center gap-3 text-sm">
+                            <span className="text-muted-foreground">{profile.count} reviews</span>
+                            {profile.avgRating && (
+                              <span className="flex items-center gap-1 font-medium">
+                                <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+                                {avgRating.toFixed(1)}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="h-2 bg-muted rounded-full overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-primary transition-all"
+                            style={{ width: `${percent}%` }}
+                          />
+                        </div>
+                      </div>
+                    )
+                  })}
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Click a profile name to filter analytics to that profile.
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
