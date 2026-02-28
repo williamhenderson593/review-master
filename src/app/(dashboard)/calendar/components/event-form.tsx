@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { CalendarIcon, Clock, MapPin, Users, Type, Tag } from "lucide-react"
+import { CalendarIcon, Clock, MapPin, Users, Type, Tag, UserPlus } from "lucide-react"
 import { format } from "date-fns"
 
 import { Button } from "@/components/ui/button"
@@ -281,7 +281,10 @@ export function EventForm({ event, open, onOpenChange, onSave, onDelete }: Event
                 onChange={(e) => setNewAttendee(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && addAttendee()}
               />
-              <Button onClick={addAttendee} variant="outline" className="cursor-pointer">Add</Button>
+              <Button onClick={addAttendee} variant="outline" className="cursor-pointer gap-1.5">
+                <UserPlus className="h-4 w-4" />
+                Add
+              </Button>
             </div>
             {formData.attendees.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">

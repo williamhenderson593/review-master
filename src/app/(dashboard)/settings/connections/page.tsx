@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
-import { Github, Slack, Twitter, Zap, Globe, Database, Apple, Chrome, Facebook, Instagram, Dribbble } from "lucide-react"
+import { Github, Slack, Twitter, Zap, Globe, Database, Apple, Chrome, Facebook, Instagram, Dribbble, RefreshCw, Copy, Plus } from "lucide-react"
 import { useState } from "react"
 export default function ConnectionSettings() {
   // Controlled state for switches
@@ -247,10 +247,12 @@ export default function ConnectionSettings() {
                     <div className="text-sm text-muted-foreground font-mono">sk_live_••••••••••••••••••••••••4234</div>
                   </div>
                   <div className="flex space-x-2">
-                    <Button variant="outline" size="sm" className="cursor-pointer">
+                    <Button variant="outline" size="sm" className="cursor-pointer gap-1.5">
+                      <RefreshCw className="h-3.5 w-3.5" />
                       Regenerate
                     </Button>
-                    <Button variant="outline" size="sm" className="cursor-pointer">
+                    <Button variant="outline" size="sm" className="cursor-pointer gap-1.5">
+                      <Copy className="h-3.5 w-3.5" />
                       Copy
                     </Button>
                   </div>
@@ -262,17 +264,22 @@ export default function ConnectionSettings() {
                     <div className="text-sm text-muted-foreground font-mono">sk_test_••••••••••••••••••••••••5678</div>
                   </div>
                   <div className="flex space-x-2">
-                    <Button variant="outline" size="sm" className="cursor-pointer">
+                    <Button variant="outline" size="sm" className="cursor-pointer gap-1.5">
+                      <RefreshCw className="h-3.5 w-3.5" />
                       Regenerate
                     </Button>
-                    <Button variant="outline" size="sm" className="cursor-pointer">
+                    <Button variant="outline" size="sm" className="cursor-pointer gap-1.5">
+                      <Copy className="h-3.5 w-3.5" />
                       Copy
                     </Button>
                   </div>
                 </div>
                 <Separator />
                 <div className="pt-4">
-                  <Button variant="outline" className="cursor-pointer">Add New API Key</Button>
+                  <Button variant="outline" className="cursor-pointer gap-2">
+                    <Plus className="h-4 w-4" />
+                    Add New API Key
+                  </Button>
                 </div>
               </div>
             </CardContent>

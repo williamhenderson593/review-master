@@ -33,6 +33,8 @@ import {
   Loader,
   Plus,
   TrendingUp,
+  Send,
+  CheckCircle2,
 } from "lucide-react"
 import {
   type ColumnDef,
@@ -1077,9 +1079,15 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
           </form>
         </div>
         <DrawerFooter>
-          <Button className="cursor-pointer">Submit</Button>
+          <Button className="cursor-pointer gap-2">
+            <Send className="h-4 w-4" />
+            Submit
+          </Button>
           <DrawerClose asChild>
-            <Button variant="outline" className="cursor-pointer">Done</Button>
+            <Button variant="outline" className="cursor-pointer gap-2">
+              <CheckCircle2 className="h-4 w-4" />
+              Done
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

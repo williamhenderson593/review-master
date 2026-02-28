@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Loader2, AlertCircle, CheckCircle2 } from "lucide-react"
+import { Loader2, AlertCircle, CheckCircle2, Save, Lock, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 
 const countries = [
@@ -308,8 +308,8 @@ export default function AccountSettings() {
           </Card>
 
           <div className="flex space-x-2">
-            <Button type="submit" className="cursor-pointer" disabled={profileLoading}>
-              {profileLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button type="submit" className="cursor-pointer gap-2" disabled={profileLoading}>
+              {profileLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Profile
             </Button>
           </div>
@@ -382,8 +382,8 @@ export default function AccountSettings() {
           </Card>
 
           <div className="flex space-x-2">
-            <Button type="submit" className="cursor-pointer" disabled={passwordLoading}>
-              {passwordLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button type="submit" className="cursor-pointer gap-2" disabled={passwordLoading}>
+              {passwordLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
               Change Password
             </Button>
           </div>
@@ -406,7 +406,8 @@ export default function AccountSettings() {
                 Permanently delete your account and all associated data.
               </p>
             </div>
-            <Button variant="destructive" type="button" className="cursor-pointer">
+            <Button variant="destructive" type="button" className="cursor-pointer gap-2">
+              <Trash2 className="h-4 w-4" />
               Delete Account
             </Button>
           </div>

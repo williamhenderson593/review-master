@@ -15,6 +15,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
+import { Save, X } from "lucide-react"
 
 const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark"]),
@@ -218,10 +219,14 @@ export default function AppearanceSettings() {
             />
 
             <div className="flex space-x-2 mt-12">
-              <Button type="submit" className="cursor-pointer">
+              <Button type="submit" className="cursor-pointer gap-2">
+                <Save className="h-4 w-4" />
                 Save Preferences
               </Button>
-              <Button variant="outline" type="button" className="cursor-pointer">Cancel</Button>
+              <Button variant="outline" type="button" className="cursor-pointer gap-2">
+                <X className="h-4 w-4" />
+                Cancel
+              </Button>
             </div>
           </form>
         </Form>
