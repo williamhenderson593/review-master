@@ -204,8 +204,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return [
       ...data.navGroups,
       {
-        label: "Admin",
+        label: "Super Admin",
         items: [
+          {
+            title: "Admin Dashboard",
+            url: "/admin",
+            icon: Building2,
+          },
           {
             title: "Businesses",
             url: "/admin/businesses",
@@ -215,6 +220,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "All Users",
             url: "/admin/users",
             icon: Users,
+          },
+          {
+            title: "All Reviews",
+            url: "/admin/reviews",
+            icon: Star,
           },
         ],
       },
