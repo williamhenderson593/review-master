@@ -5,8 +5,8 @@ import {
   timestamp,
   boolean,
   integer,
-  varchar,
   jsonb,
+  decimal,
 } from "drizzle-orm/pg-core";
 
 // ─── Clients (Businesses) ───────────────────────────────────────────────────
@@ -159,6 +159,207 @@ export const memberInvites = pgTable("member_invites", {
     .references(() => user.id, { onDelete: "cascade" }),
   expiresAt: timestamp("expires_at").notNull(),
   acceptedAt: timestamp("accepted_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Review Profiles (Review Sources / Platforms) ───────────────────────────
+export const reviewProfiles = pgTable("review_profiles", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  clientId: uuid("client_id")
+    .notNull()
+    .references(() => clients.id, { onDelete: "cascade" }),
+  name: text("name").notNull(), // e.g. "Ibis Styles Hotel - TripAdvisor"
+  platform: text("platform").notNull(), // tripadvisor, g2, capterra, trustpilot, google, appstore, playstore, etc.
+  platformProfileId: text("platform_profile_id"), // external ID on the platform
+  profileUrl: text("profile_url"), // URL to the profile on the platform
+  logoUrl: text("logo_url"),
+  isActive: boolean("is_active").notNull().default(true),
+  isCompetitor: boolean("is_competitor").notNull().default(false),
+  lastSyncedAt: timestamp("last_synced_at"),
+  syncStatus: text("sync_status").default("pending"), // pending, syncing, synced, error
+  syncError: text("sync_error"),
+  credentials: jsonb("credentials"), // encrypted OAuth tokens / API keys
+  metadata: jsonb("metadata"), // platform-specific metadata
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Reviews ─────────────────────────────────────────────────────────────────
+export const reviews = pgTable("reviews", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  clientId: uuid("client_id")
+    .notNull()
+    .references(() => clients.id, { onDelete: "cascade" }),
+  profileId: uuid("profile_id")
+    .notNull()
+    .references(() => reviewProfiles.id, { onDelete: "cascade" }),
+  platform: text("platform").notNull(),
+  externalId: text("external_id"), // ID on the external platform
+  rating: integer("rating"), // 1-5
+  title: text("title"),
+  body: text("body"),
+  authorName: text("author_name"),
+  authorEmail: text("author_email"),
+  authorAvatar: text("author_avatar"),
+  reviewUrl: text("review_url"),
+  reviewedAt: timestamp("reviewed_at"),
+  sentiment: text("sentiment"), // positive, neutral, negative
+  sentimentScore: decimal("sentiment_score", { precision: 5, scale: 4 }),
+  topics: jsonb("topics").$type<string[]>().default([]),
+  tags: jsonb("tags").$type<string[]>().default([]),
+  language: text("language").default("en"),
+  translatedBody: text("translated_body"),
+  isPublic: boolean("is_public").notNull().default(true),
+  needsAction: boolean("needs_action").notNull().default(false),
+  actionNote: text("action_note"),
+  replyText: text("reply_text"),
+  repliedAt: timestamp("replied_at"),
+  repliedBy: text("replied_by").references(() => user.id, { onDelete: "set null" }),
+  isFlagged: boolean("is_flagged").notNull().default(false),
+  flagReason: text("flag_reason"),
+  isVerified: boolean("is_verified").notNull().default(false),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Contacts ────────────────────────────────────────────────────────────────
+export const contacts = pgTable("contacts", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  clientId: uuid("client_id")
+    .notNull()
+    .references(() => clients.id, { onDelete: "cascade" }),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  email: text("email"),
+  phone: text("phone"),
+  company: text("company"),
+  jobTitle: text("job_title"),
+  tags: jsonb("tags").$type<string[]>().default([]),
+  metadata: jsonb("metadata"),
+  source: text("source"), // manual, import, crm_sync
+  externalId: text("external_id"), // CRM ID
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Campaigns (Review Generation) ──────────────────────────────────────────
+export const campaigns = pgTable("campaigns", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  clientId: uuid("client_id")
+    .notNull()
+    .references(() => clients.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  type: text("type").notNull().default("email"), // email, sms, whatsapp, magic_link, qr_code
+  status: text("status").notNull().default("draft"), // draft, active, paused, completed
+  targetPlatforms: jsonb("target_platforms").$type<string[]>().default([]),
+  subject: text("subject"),
+  messageTemplate: text("message_template"),
+  magicLinkUrl: text("magic_link_url"),
+  triggerEvent: text("trigger_event"), // manual, post_onboarding, post_nps, post_support
+  isIncentivized: boolean("is_incentivized").notNull().default(false),
+  incentiveDetails: text("incentive_details"),
+  reputationProtection: boolean("reputation_protection").notNull().default(false),
+  reputationThreshold: integer("reputation_threshold").default(3), // route below this rating to private feedback
+  totalSent: integer("total_sent").notNull().default(0),
+  totalOpened: integer("total_opened").notNull().default(0),
+  totalClicked: integer("total_clicked").notNull().default(0),
+  totalReviewed: integer("total_reviewed").notNull().default(0),
+  createdBy: text("created_by").references(() => user.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Campaign Requests ───────────────────────────────────────────────────────
+export const campaignRequests = pgTable("campaign_requests", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  campaignId: uuid("campaign_id")
+    .notNull()
+    .references(() => campaigns.id, { onDelete: "cascade" }),
+  contactId: uuid("contact_id").references(() => contacts.id, { onDelete: "set null" }),
+  clientId: uuid("client_id")
+    .notNull()
+    .references(() => clients.id, { onDelete: "cascade" }),
+  recipientEmail: text("recipient_email"),
+  recipientPhone: text("recipient_phone"),
+  recipientName: text("recipient_name"),
+  status: text("status").notNull().default("pending"), // pending, sent, opened, clicked, reviewed, bounced
+  sentAt: timestamp("sent_at"),
+  openedAt: timestamp("opened_at"),
+  clickedAt: timestamp("clicked_at"),
+  reviewedAt: timestamp("reviewed_at"),
+  reviewId: uuid("review_id").references(() => reviews.id, { onDelete: "set null" }),
+  trackingToken: text("tracking_token").unique(),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Automations ─────────────────────────────────────────────────────────────
+export const automations = pgTable("automations", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  clientId: uuid("client_id")
+    .notNull()
+    .references(() => clients.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  isActive: boolean("is_active").notNull().default(true),
+  triggerType: text("trigger_type").notNull(), // new_review, rating_below, rating_above, keyword_match, sentiment_negative
+  triggerConditions: jsonb("trigger_conditions"), // { platforms: [], minRating: 1, maxRating: 5, keywords: [] }
+  actionType: text("action_type").notNull(), // email_alert, slack_notification, teams_notification, webhook, tag_review, assign_review
+  actionConfig: jsonb("action_config"), // { to: [], channel: '', webhookUrl: '', tag: '' }
+  lastTriggeredAt: timestamp("last_triggered_at"),
+  triggerCount: integer("trigger_count").notNull().default(0),
+  createdBy: text("created_by").references(() => user.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Automation Logs ─────────────────────────────────────────────────────────
+export const automationLogs = pgTable("automation_logs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  automationId: uuid("automation_id")
+    .notNull()
+    .references(() => automations.id, { onDelete: "cascade" }),
+  reviewId: uuid("review_id").references(() => reviews.id, { onDelete: "set null" }),
+  status: text("status").notNull(), // success, failed
+  errorMessage: text("error_message"),
+  executedAt: timestamp("executed_at").defaultNow().notNull(),
+  metadata: jsonb("metadata"),
+});
+
+// ─── Integrations ────────────────────────────────────────────────────────────
+export const integrations = pgTable("integrations", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  clientId: uuid("client_id")
+    .notNull()
+    .references(() => clients.id, { onDelete: "cascade" }),
+  type: text("type").notNull(), // slack, gmail, outlook, teams, live_agent, zapier, hubspot, salesforce
+  name: text("name").notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  config: jsonb("config"), // { webhookUrl, channelId, botToken, etc. }
+  credentials: jsonb("credentials"), // encrypted OAuth tokens
+  lastUsedAt: timestamp("last_used_at"),
+  createdBy: text("created_by").references(() => user.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Widgets ─────────────────────────────────────────────────────────────────
+export const widgets = pgTable("widgets", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  clientId: uuid("client_id")
+    .notNull()
+    .references(() => clients.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  type: text("type").notNull(), // carousel, wall_of_love, badge, single_review
+  isActive: boolean("is_active").notNull().default(true),
+  config: jsonb("config"), // { minRating, platforms, tags, colors, font, layout }
+  embedCode: text("embed_code"),
+  viewCount: integer("view_count").notNull().default(0),
+  createdBy: text("created_by").references(() => user.id, { onDelete: "set null" }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

@@ -21,6 +21,14 @@ const protectedPaths = [
   '/settings',
   '/pricing',
   '/faqs',
+  '/reviews',
+  '/review-profiles',
+  '/analytics',
+  '/automations',
+  '/campaigns',
+  '/contacts',
+  '/integrations',
+  '/widgets',
 ]
 
 // Auth routes on app subdomain (redirect to dashboard if already logged in)

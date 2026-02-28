@@ -2,19 +2,24 @@
 
 import * as React from "react"
 import {
-  LayoutPanelLeft,
   LayoutDashboard,
-  Mail,
-  CheckSquare,
-  MessageCircle,
-  Calendar,
+  Star,
+  MessageSquare,
+  BarChart3,
+  Zap,
+  Send,
+  Users,
+  Plug,
+  Code2,
   Settings,
   HelpCircle,
   CreditCard,
-  Users,
   UserPlus,
   Key,
   Building2,
+  Globe,
+  TrendingUp,
+  Bell,
 } from "lucide-react"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
@@ -34,7 +39,7 @@ import {
 import { useSession } from "@/lib/auth-client"
 
 function useProfileData() {
-  const [businessName, setBusinessName] = React.useState<string>("Dashboard")
+  const [businessName, setBusinessName] = React.useState<string>("ReviewFlow")
   const [roleName, setRoleName] = React.useState<string | null>(null)
 
   React.useEffect(() => {
@@ -57,7 +62,7 @@ function useProfileData() {
 const data = {
   navGroups: [
     {
-      label: "Dashboards",
+      label: "Overview",
       items: [
         {
           title: "Dashboard",
@@ -65,44 +70,69 @@ const data = {
           icon: LayoutDashboard,
         },
         {
-          title: "Dashboard 2",
-          url: "/dashboard-2",
-          icon: LayoutPanelLeft,
+          title: "Analytics",
+          url: "/analytics",
+          icon: BarChart3,
         },
       ],
     },
     {
-      label: "Apps",
+      label: "Reviews",
       items: [
         {
-          title: "Mail",
-          url: "/mail",
-          icon: Mail,
+          title: "Review Profiles",
+          url: "/review-profiles",
+          icon: Globe,
         },
         {
-          title: "Tasks",
-          url: "/tasks",
-          icon: CheckSquare,
+          title: "All Reviews",
+          url: "/reviews",
+          icon: Star,
         },
         {
-          title: "Chat",
-          url: "/chat",
-          icon: MessageCircle,
+          title: "Automations",
+          url: "/automations",
+          icon: Zap,
+        },
+      ],
+    },
+    {
+      label: "Review Generation",
+      items: [
+        {
+          title: "Campaigns",
+          url: "/campaigns",
+          icon: Send,
         },
         {
-          title: "Calendar",
-          url: "/calendar",
-          icon: Calendar,
-        },
-        {
-          title: "Users",
-          url: "/users",
+          title: "Contacts",
+          url: "/contacts",
           icon: Users,
         },
       ],
     },
     {
-      label: "Management",
+      label: "Showcase",
+      items: [
+        {
+          title: "Widgets",
+          url: "/widgets",
+          icon: Code2,
+        },
+      ],
+    },
+    {
+      label: "Connect",
+      items: [
+        {
+          title: "Integrations",
+          url: "/integrations",
+          icon: Plug,
+        },
+      ],
+    },
+    {
+      label: "Account",
       items: [
         {
           title: "Team Members",
@@ -138,11 +168,6 @@ const data = {
           ],
         },
         {
-          title: "FAQs",
-          url: "/faqs",
-          icon: HelpCircle,
-        },
-        {
           title: "Pricing",
           url: "/pricing",
           icon: CreditCard,
@@ -162,31 +187,28 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     avatar: session?.user?.image || "",
   }
 
-  // Build nav groups, injecting admin items into Dashboards group for super admins
+  // Build nav groups, injecting admin items for super admins
   const navGroups = React.useMemo(() => {
     if (roleName !== "super_admin") return data.navGroups
 
-    return data.navGroups.map((group) => {
-      if (group.label === "Dashboards") {
-        return {
-          ...group,
-          items: [
-            ...group.items,
-            {
-              title: "Businesses",
-              url: "/admin/businesses",
-              icon: Building2,
-            },
-            {
-              title: "All Users",
-              url: "/admin/users",
-              icon: Users,
-            },
-          ],
-        }
-      }
-      return group
-    })
+    return [
+      ...data.navGroups,
+      {
+        label: "Admin",
+        items: [
+          {
+            title: "Businesses",
+            url: "/admin/businesses",
+            icon: Building2,
+          },
+          {
+            title: "All Users",
+            url: "/admin/users",
+            icon: Users,
+          },
+        ],
+      },
+    ]
   }, [roleName])
 
   return (
@@ -197,11 +219,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Logo size={24} className="text-current" />
+                  <Star size={16} className="text-current" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{businessName}</span>
-                  <span className="truncate text-xs">Dashboard</span>
+                  <span className="truncate font-semibold">{businessName}</span>
+                  <span className="truncate text-xs text-muted-foreground">Review Management</span>
                 </div>
               </Link>
             </SidebarMenuButton>
