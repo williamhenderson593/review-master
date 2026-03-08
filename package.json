@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3003",
+    "dev": "next dev -p 3004",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "curl -X POST http://localhost:3003/api/seed"
+    "db:seed": "curl -X POST http://localhost:3004/api/seed"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
